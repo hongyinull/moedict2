@@ -30,6 +30,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		E9FE7A2E2CD166C30032EDB8 /* Assets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		E9FEF7382CD152C20018E6F0 /* moedict2 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = moedict2;
@@ -75,6 +80,7 @@
 		E9FEF72D2CD152C20018E6F0 = {
 			isa = PBXGroup;
 			children = (
+				E9FE7A2E2CD166C30032EDB8 /* Assets */,
 				E9FEF7382CD152C20018E6F0 /* moedict2 */,
 				E9FEF74A2CD152C30018E6F0 /* moedict2Tests */,
 				E9FEF7542CD152C30018E6F0 /* moedict2UITests */,
@@ -108,6 +114,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				E9FE7A2E2CD166C30032EDB8 /* Assets */,
 				E9FEF7382CD152C20018E6F0 /* moedict2 */,
 			);
 			name = moedict2;
