@@ -59,10 +59,11 @@ struct CardResultView: View {
                 }
             }
             .scrollTargetBehavior(.paging)
+            .padding()
         }
         .padding()
         .frame(height: UIScreen.main.bounds.height * 0.7) // 限制卡片高度
-        .background(.background)
+        .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 } 
@@ -90,7 +91,7 @@ struct BigCardResultView: View {
                         strokeCount: result.stroke_count
                     )
                     .frame(width: UIScreen.main.bounds.width - 40)
-                    .background(.background)
+                    .background(.regularMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                 }
@@ -99,6 +100,7 @@ struct BigCardResultView: View {
             .padding(.horizontal, 20)
         }
         .scrollTargetBehavior(.paging)
+        .background(.ultraThinMaterial)
     }
 }
 

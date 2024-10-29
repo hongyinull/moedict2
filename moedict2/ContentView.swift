@@ -25,6 +25,7 @@ struct ContentView: View {
                     )
                 }
             }
+            .background(.ultraThinMaterial)
             .navigationTitle("萌典")
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(.visible, for: .navigationBar)
