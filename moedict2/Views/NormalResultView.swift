@@ -1,4 +1,4 @@
-// DictionaryResultView.swift
+// NormalResultView.swift
 // 處理字典搜尋結果的顯示視圖
 
 import SwiftUI
@@ -25,7 +25,7 @@ struct Definition: Codable {
     let quote: [String]?
 }
 
-struct DictionaryResultView: View {
+struct NormalResultView: View {
     let result: DictResponse
     
     var body: some View {
