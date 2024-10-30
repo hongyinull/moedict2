@@ -19,14 +19,20 @@ struct ContentView: View {
                         .transition(.opacity)
                 } else {
                     ContentUnavailableView(
-                        "萌典",
+                        "萌典2.0",
                         systemImage: "character.book.closed",
                         description: Text("輸入中文字詞開始查詢")
                     )
                 }
+                
+                Spacer()
+                
+                // 版權資訊
+                CopyrightLabel()
+                    .padding(.bottom, 8)
             }
             .background(.ultraThinMaterial)
-            .navigationTitle("萌典")
+            .navigationTitle("萌典2.0")
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(.visible, for: .navigationBar)
             .searchable(
@@ -53,8 +59,8 @@ struct ContentView: View {
             Text("請確認網路連線並重試")
         }
         .onAppear {
-            // 移除預設搜尋，讓使用者主動搜尋
-            searchText = ""
+            // 預設搜尋
+            searchText = "萌"
         }
     }
     

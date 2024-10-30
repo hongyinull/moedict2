@@ -59,9 +59,9 @@ struct CardResultView: View {
                 }
             }
             .scrollTargetBehavior(.paging)
-            .padding()
+            .padding(.horizontal)
         }
-        .padding()
+        .padding([.top, .horizontal])
         .frame(height: UIScreen.main.bounds.height * 0.7) // 限制卡片高度
         .background(.regularMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 16))

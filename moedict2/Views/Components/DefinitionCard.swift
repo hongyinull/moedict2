@@ -8,17 +8,17 @@ struct DefinitionCard: View {
     // MARK: - 主視圖
     var body: some View {
         // 只有當詞性不為空時才顯示卡片
-        if !type.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
                 // MARK: - 詞性標籤
-                Text(type)
-                    .font(.headline)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(.tint.opacity(0.1))
-                    .foregroundStyle(.tint)
-                    .cornerRadius(8)
-                
+                if !type.isEmpty {
+                    Text(type)
+                        .font(.headline)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(.tint.opacity(0.1))
+                        .foregroundStyle(.tint)
+                        .cornerRadius(8)
+                }
                 // MARK: - 釋義列表
                 ForEach(definitions.indices, id: \.self) { index in
                     let def = definitions[index]
@@ -48,6 +48,7 @@ struct DefinitionCard: View {
                         }
                     }
                     .padding(.horizontal)
+//                    .frame(maxWidth: .infinity)
                     
                     // 分隔線
                     if index < definitions.count - 1 {
@@ -61,7 +62,6 @@ struct DefinitionCard: View {
             .background(.thinMaterial)
             .cornerRadius(12)
             .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
-        }
     }
 }
 
