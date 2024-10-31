@@ -11,9 +11,27 @@ struct ContentView: View {
     @State private var suggestions: [String] = []
     @StateObject private var wordIndex = WordIndex()
     
+    // 新增語言選擇的列舉和狀態變數
+    enum DictType: String, CaseIterable {
+        case mandarin = "國語"
+        case taiwanese = "閩南語"
+        case hakka = "客語"
+        
+        // 取得對應的 URL 前綴
+        var urlPrefix: String {
+            switch self {
+            case .mandarin: return "uni"
+            case .taiwanese: return "t"
+            case .hakka: return "h"
+            }
+        }
+    }
+    
+    @State private var selectedDict: DictType = .mandarin
+    
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            VStack(spacing: 10) {
                 if let result = searchResult {
                     BigCardResultView(result: result)
 //                        .transition(.opacity)
@@ -35,14 +53,41 @@ struct ContentView: View {
             }
 //            .ignoresSafeArea(.all, edges: .bottom)
 //            .background(.background)
-            .navigationTitle("萌典2.0")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("萌典2.0")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Picker("字典選擇", selection: $selectedDict) {
+                            ForEach(DictType.allCases, id: \.self) { type in
+                                Text(type.rawValue).tag(type)
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Image(systemName: "book")
+                            Text(selectedDict.rawValue)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.accentColor.opacity(0.2))
+                        .cornerRadius(8)
+                    }
+                }
+            }
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer,
                 prompt: "搜尋字詞"
             )
+//            .offset(y: 15)
             .onSubmit(of: .search, performSearch)
             .onChange(of: searchText) { newValue in
                 // 取得更多建議（最多顯示 15 個）
@@ -81,10 +126,10 @@ struct ContentView: View {
         }
     }
     
-    // 執行搜尋功能
+    // 修改搜尋功能以支援不同的字典
     func performSearch() {
         guard let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
-              let url = URL(string: "https://www.moedict.tw/uni/\(encodedText).json") else {
+              let url = URL(string: "https://www.moedict.tw/\(selectedDict.urlPrefix)/\(encodedText).json") else {
             return
         }
         

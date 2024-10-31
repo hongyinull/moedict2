@@ -58,20 +58,14 @@ struct CardResultView: View {
                         if let definitions = definitionsByType[type] {
                             DefinitionCard(type: type, definitions: definitions)
                                 .frame(maxWidth: .infinity) //卡片填滿寬度
-//                                .scrollTransition { content, phase in
-//                                    content
-//                                        .opacity(phase.isIdentity ? 1 : 0.3)
-//                                        .scaleEffect(phase.isIdentity ? 1 : 0.8)
-//                                }//增加卡片滑入滑出視野的動畫效果
                         }
-                        
                     }
                     CopyrightLabel().padding(.bottom, 4)
                 }
             }
-            .pinnedScrollView()
             .scrollTargetBehavior(.paging)
             .padding(.bottom)
+            .scrollContentBackground(.visible)  // 顯示滾動內容背景
         }
         .padding(30)
 //        .padding([.top, .horizontal])
@@ -104,7 +98,7 @@ struct BigCardResultView: View {
                         strokeCount: result.stroke_count
                     )
                     .background(.thinMaterial) // 設定背景為 thin 的 material
-                    .aspectRatio(0.8, contentMode: .fit) // 調整卡片比例
+                    .aspectRatio(0.6, contentMode: .fit) // 調整卡片比例
                     .pageViewCardCornerRadius(30.0) // 設定卡片圓角
                     .pageViewCardShadow(.visible) // 設定卡片陰影
                     .onTapGesture {
@@ -129,7 +123,7 @@ struct BigCardResultView: View {
             )
             .pageIndicatorColor(.secondary.opacity(0.3)) // 設定指示器顏色
             .pageIndicatorCurrentColor(.accentColor) // 設定當前指示器顏色
-            .allowsContinuousInteraction(true)
+            // .allowsContinuousInteraction(true)
             .singlePageVisibility(.hidden)
             .pageIndicatorDuration(6.0)
             .offset(y: -20)
@@ -146,9 +140,9 @@ struct BigCardResultView: View {
             Heteronym(
                 definitions: [
                     Definition(
-                        def: "愛、喜愛。",
+                        def: "愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。",
                         type: "動",
-                        example: ["如：「好學不倦」"],
+                        example: ["如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」"],
                         quote: nil
                     )
                 ],
