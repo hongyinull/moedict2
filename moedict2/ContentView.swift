@@ -53,16 +53,9 @@ struct ContentView: View {
             }
 //            .ignoresSafeArea(.all, edges: .bottom)
 //            .background(.background)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .navigationTitle("萌典2.0")
+            .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("萌典2.0")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Picker("字典選擇", selection: $selectedDict) {
