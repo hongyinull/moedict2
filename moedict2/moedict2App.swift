@@ -10,8 +10,12 @@ import SwiftUI
 @main
 struct moedict2App: App {
     init() {
-        // 設定全域 AccentColor
-        UIView.appearance().tintColor = UIColor(red: 255/255, green: 149/255, blue: 0/255, alpha: 1)
+        let accentColor = UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark
+            ? UIColor(red: 153/255, green: 31/255, blue: 34/255, alpha: 1)  // 暗色模式
+            : UIColor(red: 107/255, green: 0/255, blue: 6/255, alpha: 1)    // 亮色模式
+        }
+        UIView.appearance().tintColor = accentColor
     }
     
     var body: some Scene {

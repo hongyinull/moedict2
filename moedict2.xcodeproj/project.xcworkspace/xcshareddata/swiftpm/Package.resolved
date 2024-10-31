@@ -1,0 +1,24 @@
+{
+  "originHash" : "85cb3ed99b04826716bb6a4153978f0edf307b21145c12a4436bb59b04f005db",
+  "pins" : [
+    {
+      "identity" : "biguipaging",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/notsobigcompany/BigUIPaging.git",
+      "state" : {
+        "revision" : "40fa6e1683bd47b962e216c05377bfd1b8f760de",
+        "version" : "0.0.3"
+      }
+    },
+    {
+      "identity" : "pinnedscrollview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Lumisilk/PinnedScrollView.git",
+      "state" : {
+        "revision" : "cf8311e65c12b8a6991c83cb5e98a804cd232231",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

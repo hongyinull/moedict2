@@ -2,6 +2,8 @@
 // 處理字典搜尋結果的顯示視圖
 
 import SwiftUI
+import PinnedScrollView
+import BigUIPaging
 
 
 struct CardResultView: View {
@@ -44,27 +46,38 @@ struct CardResultView: View {
                 }
             }
             
+            
             Divider()
                 .foregroundStyle(.separator)
+                .padding(.bottom, 0)
             
             // 詞性定義卡片
             ScrollView {
-                LazyVStack(spacing: 16) {
+                LazyVStack(spacing: 8) {
                     ForEach(Array(definitionsByType.keys.sorted()), id: \.self) { type in
                         if let definitions = definitionsByType[type] {
                             DefinitionCard(type: type, definitions: definitions)
-                                .frame(maxWidth: .infinity) // 讓卡片填滿寬度
+                                .frame(maxWidth: .infinity) //卡片填滿寬度
+//                                .scrollTransition { content, phase in
+//                                    content
+//                                        .opacity(phase.isIdentity ? 1 : 0.3)
+//                                        .scaleEffect(phase.isIdentity ? 1 : 0.8)
+//                                }//增加卡片滑入滑出視野的動畫效果
                         }
+                        
                     }
+                    CopyrightLabel().padding(.bottom, 4)
                 }
             }
+            .pinnedScrollView()
             .scrollTargetBehavior(.paging)
-            .padding(.horizontal)
+            .padding(.bottom)
         }
-        .padding([.top, .horizontal])
-        .frame(height: UIScreen.main.bounds.height * 0.7) // 限制卡片高度
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding(30)
+//        .padding([.top, .horizontal])
+//        .frame(height: UIScreen.main.bounds.height * 0.7) // 限制卡片高度
+//        .background(.regularMaterial)
+//        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 } 
 
@@ -79,10 +92,10 @@ struct CardResultView: View {
 
 struct BigCardResultView: View {
     let result: DictResponse
+    @State private var currentSelection: Int = 0 // 使用 @State 來追蹤當前選擇的卡片索引
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 20) {
+            PageView(selection: $currentSelection) { // 傳遞 currentSelection
                 ForEach(result.heteronyms.indices, id: \.self) { index in
                     CardResultView(
                         heteronym: result.heteronyms[index],
@@ -90,17 +103,37 @@ struct BigCardResultView: View {
                         radical: result.radical,
                         strokeCount: result.stroke_count
                     )
-                    .frame(width: UIScreen.main.bounds.width - 40)
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
+                    .background(.thinMaterial) // 設定背景為 thin 的 material
+                    .aspectRatio(0.8, contentMode: .fit) // 調整卡片比例
+                    .pageViewCardCornerRadius(30.0) // 設定卡片圓角
+                    .pageViewCardShadow(.visible) // 設定卡片陰影
+                    .onTapGesture {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred() // 觸發震動
+                        print("Tapped card \(index)") // 點擊卡片時的動作
+                    }
+                    
                 }
+                
             }
-            .scrollTargetLayout()
-            .padding(.horizontal, 20)
-        }
-        .scrollTargetBehavior(.paging)
-        .background(.ultraThinMaterial)
+
+        
+        
+        
+            
+            .pageViewStyle(.cardDeck) // 設定卡片樣式
+            .scaleEffect(1.1) // 卡片倍數大小
+            
+            PageIndicator(
+                selection: $currentSelection, // 使用 currentSelection 來表示選擇
+                total: result.heteronyms.count // 總卡片數量
+            )
+            .pageIndicatorColor(.secondary.opacity(0.3)) // 設定指示器顏色
+            .pageIndicatorCurrentColor(.accentColor) // 設定當前指示器顏色
+            .allowsContinuousInteraction(true)
+            .singlePageVisibility(.hidden)
+            .pageIndicatorDuration(6.0)
+            .offset(y: -20)
+            .onChange(of: currentSelection) { _ in UIImpactFeedbackGenerator(style: .light).impactOccurred() } // 卡片翻頁時震動
     }
 }
 

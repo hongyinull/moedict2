@@ -1,4 +1,5 @@
 import SwiftUI
+import PinnedScrollView
 
 struct StrokeRadicalBadge: View {
     let radical: String

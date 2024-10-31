@@ -16,22 +16,25 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 if let result = searchResult {
                     BigCardResultView(result: result)
-                        .transition(.opacity)
+//                        .transition(.opacity)
+//                        .padding(.vertical)
                 } else {
                     ContentUnavailableView(
                         "萌典2.0",
                         systemImage: "character.book.closed",
                         description: Text("輸入中文字詞開始查詢")
+                        
                     )
+                    Spacer()
+                    
+                    // 版權資訊
+                    CopyrightLabel().padding(.bottom, 8)
                 }
                 
-                Spacer()
                 
-                // 版權資訊
-                CopyrightLabel()
-                    .padding(.bottom, 8)
             }
-            .background(.ultraThinMaterial)
+//            .ignoresSafeArea(.all, edges: .bottom)
+//            .background(.background)
             .navigationTitle("萌典2.0")
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -42,7 +45,19 @@ struct ContentView: View {
             )
             .onSubmit(of: .search, performSearch)
             .onChange(of: searchText) { newValue in
-                suggestions = wordIndex.getSuggestions(for: newValue)
+                // 取得更多建議（最多顯示 15 個）
+                if let firstChar = newValue.first.map(String.init) {
+                    suggestions = [firstChar] + wordIndex.getSuggestions(for: newValue, limit: 14)
+                        .filter { $0 != firstChar }
+                } else {
+                    suggestions = wordIndex.getSuggestions(for: newValue, limit: 15)
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification)) { _ in
+                if searchText.contains("\n") {
+                    searchText = searchText.replacingOccurrences(of: "\n", with: "")
+                    performSearch()
+                }
             }
             .searchSuggestions {
                 if !suggestions.isEmpty {
@@ -53,6 +68,7 @@ struct ContentView: View {
                 }
             }
         }
+        
         .alert("查詢失敗", isPresented: $showError) {
             Button("確定", role: .cancel) { }
         } message: {
@@ -60,7 +76,8 @@ struct ContentView: View {
         }
         .onAppear {
             // 預設搜尋
-            searchText = "萌"
+            searchText = "和"
+            performSearch()
         }
     }
     
