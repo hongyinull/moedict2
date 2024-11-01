@@ -121,21 +121,57 @@ struct ContentView: View {
     
     // 修改搜尋功能以支援不同的字典
     func performSearch() {
-        guard let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
-              let url = URL(string: "https://www.moedict.tw/\(selectedDict.urlPrefix)/\(encodedText).json") else {
+        guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return
         }
         
+        guard let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed),
+              let url = URL(string: "https://www.moedict.tw/\(selectedDict.urlPrefix)/\(encodedText).json") else {
+            print("URL 創建失敗")
+            self.showError = true
+            return
+        }
+        
+        print("開始查詢：\(url.absoluteString)")
+        
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
-                if let data = data {
-                    do {
-                        let result = try JSONDecoder().decode(DictResponse.self, from: data)
-                        self.searchResult = result
-                    } catch {
-                        self.showError = true
+                if let error = error {
+                    print("網路錯誤：\(error.localizedDescription)")
+                    self.showError = true
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode) else {
+                    print("HTTP 錯誤：\(String(describing: response))")
+                    self.showError = true
+                    return
+                }
+                
+                guard let data = data else {
+                    print("沒有收到數據")
+                    self.showError = true
+                    return
+                }
+                
+                do {
+                    // 先嘗試解析原始 JSON 以便偵錯
+                    if let json = try? JSONSerialization.jsonObject(with: data) {
+                        print("收到的 JSON：\(json)")
                     }
-                } else {
+                    
+                    let result = try JSONDecoder().decode(DictResponse.self, from: data)
+                    guard !result.heteronyms.isEmpty else {
+                        print("heteronyms 為空")
+                        self.showError = true
+                        return
+                    }
+                    
+                    self.searchResult = result
+                    print("成功解析結果：\(result.title)")
+                } catch {
+                    print("JSON 解碼錯誤：\(error)")
                     self.showError = true
                 }
             }

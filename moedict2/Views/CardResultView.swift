@@ -51,21 +51,6 @@ struct CardResultView: View {
                 .foregroundStyle(.separator)
                 .padding(.bottom, 0)
             
-            // 詞性定義卡片
-            ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(Array(definitionsByType.keys.sorted()), id: \.self) { type in
-                        if let definitions = definitionsByType[type] {
-                            DefinitionCard(type: type, definitions: definitions)
-                                .frame(maxWidth: .infinity) //卡片填滿寬度
-                        }
-                    }
-                    CopyrightLabel().padding(.bottom, 4)
-                }
-            }
-            .scrollTargetBehavior(.paging)
-            .padding(.bottom)
-            .scrollContentBackground(.visible)  // 顯示滾動內容背景
         }
         .padding(30)
 //        .padding([.top, .horizontal])
@@ -86,48 +71,62 @@ struct CardResultView: View {
 
 struct BigCardResultView: View {
     let result: DictResponse
-    @State private var currentSelection: Int = 0 // 使用 @State 來追蹤當前選擇的卡片索引
+    @State private var currentSelection: Int = 0
     
     var body: some View {
-            PageView(selection: $currentSelection) { // 傳遞 currentSelection
-                ForEach(result.heteronyms.indices, id: \.self) { index in
-                    CardResultView(
-                        heteronym: result.heteronyms[index],
-                        title: result.title,
-                        radical: result.radical,
-                        strokeCount: result.stroke_count
-                    )
-                    .background(.thinMaterial) // 設定背景為 thin 的 material
-                    .aspectRatio(0.6, contentMode: .fit) // 調整卡片比例
-                    .pageViewCardCornerRadius(30.0) // 設定卡片圓角
-                    .pageViewCardShadow(.visible) // 設定卡片陰影
-                    .onTapGesture {
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred() // 觸發震動
-                        print("Tapped card \(index)") // 點擊卡片時的動作
+        VStack {
+            // 確保有資料才顯示 PageView
+            if !result.heteronyms.isEmpty {
+                PageView(selection: $currentSelection) {
+                    ForEach(0..<result.heteronyms.count, id: \.self) { index in
+                        CardResultView(
+                            heteronym: result.heteronyms[index],
+                            title: result.title,
+                            radical: result.radical,
+                            strokeCount: result.stroke_count
+                        )
+                        .background(.thinMaterial)
+                        .aspectRatio(0.6, contentMode: .fit)
+                        .pageViewCardCornerRadius(30.0)
+                        .pageViewCardShadow(.visible)
+                        .onTapGesture {
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        }
                     }
-                    
                 }
+                .pageViewStyle(.cardDeck)
+                .scaleEffect(1.1)
                 
+                // 只在有多個讀音時顯示指示器
+                if result.heteronyms.count > 1 {
+                    PageIndicator(
+                        selection: $currentSelection,
+                        total: result.heteronyms.count
+                    )
+                    .pageIndicatorColor(.secondary.opacity(0.3))
+                    .pageIndicatorCurrentColor(.accentColor)
+                    .singlePageVisibility(.hidden)
+                    .pageIndicatorDuration(6.0)
+                    .offset(y: -20)
+                    .onChange(of: currentSelection) { _ in
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    }
+                }
+            } else {
+                // 當沒有資料時顯示提示
+                ContentUnavailableView(
+                    "無法顯示結果",
+                    systemImage: "exclamationmark.triangle",
+                    description: Text("找不到相關資料")
+                )
             }
-
-        
-        
-        
-            
-            .pageViewStyle(.cardDeck) // 設定卡片樣式
-            .scaleEffect(1.1) // 卡片倍數大小
-            
-            PageIndicator(
-                selection: $currentSelection, // 使用 currentSelection 來表示選擇
-                total: result.heteronyms.count // 總卡片數量
-            )
-            .pageIndicatorColor(.secondary.opacity(0.3)) // 設定指示器顏色
-            .pageIndicatorCurrentColor(.accentColor) // 設定當前指示器顏色
-            // .allowsContinuousInteraction(true)
-            .singlePageVisibility(.hidden)
-            .pageIndicatorDuration(6.0)
-            .offset(y: -20)
-            .onChange(of: currentSelection) { _ in UIImpactFeedbackGenerator(style: .light).impactOccurred() } // 卡片翻頁時震動
+        }
+        // 確保 currentSelection 不會超出範圍
+        .onChange(of: result.heteronyms.count) { newCount in
+            if currentSelection >= newCount {
+                currentSelection = max(0, newCount - 1)
+            }
+        }
     }
 }
 
@@ -140,7 +139,7 @@ struct BigCardResultView: View {
             Heteronym(
                 definitions: [
                     Definition(
-                        def: "愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。",
+                        def: "愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。",
                         type: "動",
                         example: ["如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」"],
                         quote: nil
