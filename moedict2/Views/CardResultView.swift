@@ -53,6 +53,7 @@ struct CardResultView: View {
             
             // 詞性定義卡片
             ScrollView {
+                Spacer().frame(height: 15)
                 LazyVStack(spacing: 8) {
                     ForEach(Array(definitionsByType.keys.sorted()), id: \.self) { type in
                         if let definitions = definitionsByType[type] {
@@ -61,10 +62,12 @@ struct CardResultView: View {
                         }
                     }
                     CopyrightLabel().padding(.bottom, 4)
+                    Spacer().frame(height: 15)
                 }
             }
-            .scrollTargetBehavior(.paging)
-            .padding(.bottom)
+//            .scrollTargetBehavior(.paging)
+            .padding(.bottom, -30)
+            .padding(.top, -15)
             .scrollContentBackground(.visible)  // 顯示滾動內容背景
         }
         .padding(30)
