@@ -114,7 +114,7 @@ struct ContentView: View {
         }
         .onAppear {
             // 預設搜尋
-            searchText = "和"
+            searchText = "萌"
             performSearch()
         }
     }
