@@ -37,12 +37,12 @@ struct ContentView: View {
 //                        .transition(.opacity)
 //                        .padding(.vertical)
                 } else {
-                    ContentUnavailableView(
-                        "萌典2.0",
-                        systemImage: "character.book.closed",
-                        description: Text("輸入中文字詞開始查詢")
-                        
-                    )
+//                    ContentUnavailableView(
+//                        "萌典2.0",
+//                        systemImage: "character.book.closed",
+//                        description: Text("輸入中文字詞開始查詢")
+//                        
+//                    )
                     Spacer()
                     
                     // 版權資訊
@@ -85,10 +85,17 @@ struct ContentView: View {
             .onChange(of: searchText) { newValue in
                 // 取得更多建議（最多顯示 15 個）
                 if let firstChar = newValue.first.map(String.init) {
-                    suggestions = [firstChar] + wordIndex.getSuggestions(for: newValue, limit: 14)
-                        .filter { $0 != firstChar }
+                    suggestions = [firstChar] + wordIndex.getSuggestions(
+                        for: newValue,
+                        dictType: selectedDict,
+                        limit: 14
+                    ).filter { $0 != firstChar }
                 } else {
-                    suggestions = wordIndex.getSuggestions(for: newValue, limit: 15)
+                    suggestions = wordIndex.getSuggestions(
+                        for: newValue,
+                        dictType: selectedDict,
+                        limit: 15
+                    )
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification)) { _ in
