@@ -122,7 +122,7 @@ struct BigCardResultView: View {
                         translations: result.translations
                     )
                     .background(.thinMaterial)
-                    .aspectRatio(0.6, contentMode: .fit)
+//                    .aspectRatio(0.6, contentMode: .fit)
                     .pageViewCardCornerRadius(30.0)
                     .pageViewCardShadow(.visible)
                 }
