@@ -3,37 +3,6 @@
 
 import SwiftUI
 
-// 擴充定義結構，加入更多欄位
-struct DictResponse: Codable, Identifiable {
-    let title: String
-    let heteronyms: [Heteronym]
-    let radical: String?
-    let stroke_count: Int?
-    
-    // 加入 id 屬性
-    var id: String { title }
-}
-
-struct Heteronym: Codable, Identifiable {
-    let definitions: [Definition]
-    let bopomofo: String?
-    let bopomofo2: String?
-    let pinyin: String?
-    
-    // 加入 id 屬性
-    var id: String { bopomofo ?? UUID().uuidString }
-}
-
-struct Definition: Codable, Identifiable {
-    let def: String
-    let type: String?
-    let example: [String]?
-    let quote: [String]?
-    
-    // 加入 id 屬性
-    var id: String { def }
-}
-
 struct NormalResultView: View {
     let result: DictResponse
     

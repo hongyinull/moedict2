@@ -111,7 +111,7 @@ struct BigCardResultView: View {
     @State private var currentSelection: Int = 0
     
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             PageView(selection: $currentSelection) {
                 ForEach(result.heteronyms.indices, id: \.self) { index in
                     CardResultView(
@@ -125,10 +125,6 @@ struct BigCardResultView: View {
                     .aspectRatio(0.6, contentMode: .fit)
                     .pageViewCardCornerRadius(30.0)
                     .pageViewCardShadow(.visible)
-                    .onTapGesture {
-                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        print("Tapped card \(index)")
-                    }
                 }
             }
             .pageViewStyle(.cardDeck)
@@ -138,6 +134,16 @@ struct BigCardResultView: View {
                 selection: $currentSelection,
                 total: result.heteronyms.count
             )
+            .pageIndicatorDuration(6.0)
+            .pageIndicatorCurrentColor(.accentColor)
+            .pageIndicatorColor(.secondary.opacity(0.5))
+//            .pageIndicatorBackgroundStyle(.prominent)
+            .singlePageVisibility(.hidden)
+            .scaleEffect(1.3)
+            .offset(y: -30) // 往上移動15
+        }
+        .onChange(of: currentSelection) { newValue in
+            UIImpactFeedbackGenerator().impactOccurred()
         }
     }
 }

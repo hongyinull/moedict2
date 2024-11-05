@@ -156,13 +156,8 @@ struct ContentView: View {
                     } catch {
                         print("解碼錯誤：\(error)")
                         self.showError = true
-                        return
                     }
-                    
-                    self.searchResult = result
-                    print("成功解析結果：\(result.title)")
-                } catch {
-                    print("JSON 解碼錯誤：\(error)")
+                } else {
                     self.showError = true
                 }
             }
