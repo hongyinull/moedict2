@@ -65,6 +65,7 @@ struct CardResultView: View {
                     Spacer().frame(height: 15)
                 }
             }
+            .scrollIndicators(.hidden) // 隱藏滾動條
 //            .scrollTargetBehavior(.paging)
             .padding(.bottom, -30)
             .padding(.top, -15)
