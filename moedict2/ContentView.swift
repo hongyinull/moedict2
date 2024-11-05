@@ -20,7 +20,7 @@ struct ContentView: View {
         // 取得對應的 URL 前綴
         var urlPrefix: String {
             switch self {
-            case .mandarin: return "uni"
+            case .mandarin: return "a"
             case .taiwanese: return "t"
             case .hakka: return "h"
             }
@@ -137,9 +137,16 @@ struct ContentView: View {
             DispatchQueue.main.async {
                 if let data = data {
                     do {
+                        // 檢查是否有資料返回
+                        guard !data.isEmpty else {
+                            self.showError = true
+                            return
+                        }
+                        
                         let result = try JSONDecoder().decode(DictResponse.self, from: data)
                         self.searchResult = result
                     } catch {
+                        print("解碼錯誤：\(error)")
                         self.showError = true
                     }
                 } else {

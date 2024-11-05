@@ -3,27 +3,6 @@
 
 import SwiftUI
 
-// 擴充定義結構，加入更多欄位
-struct DictResponse: Codable {
-    let title: String
-    let heteronyms: [Heteronym]
-    let radical: String?
-    let stroke_count: Int?
-}
-
-struct Heteronym: Codable {
-    let definitions: [Definition]
-    let bopomofo: String?
-    let bopomofo2: String?
-    let pinyin: String?
-}
-
-struct Definition: Codable {
-    let def: String
-    let type: String?
-    let example: [String]?
-    let quote: [String]?
-}
 
 struct NormalResultView: View {
     let result: DictResponse
@@ -35,7 +14,7 @@ struct NormalResultView: View {
                 Text(result.title)
                     .font(.system(size: 36, weight: .bold))
                 
-                if let radical = result.radical, let strokeCount = result.stroke_count {
+                if let radical = result.radical, let strokeCount = result.strokeCount {
                     Text("部首：\(radical) ・ \(strokeCount)畫")
                         .font(.subheadline)
                         .foregroundColor(.gray)
