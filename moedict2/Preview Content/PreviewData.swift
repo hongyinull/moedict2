@@ -1,30 +1,30 @@
 import Foundation
 
 extension DictResponse {
-    static let preview = DictResponse(
-        title: "好",
-        heteronyms: [
-            Heteronym(
-                definitions: [
-                    Definition(
-                        def: "美、善，理想的。",
-                        type: "形",
-                        example: ["如：「好東西」、「好風景」"],
-                        quote: ["唐．韋莊．菩薩蠻：「人人盡說江南好」"]
-                    ),
-                    Definition(
-                        def: "友愛的。",
-                        type: "形",
-                        example: ["如：「好朋友」"],
-                        quote: nil
-                    )
+    static let preview: DictResponse = try! JSONDecoder().decode(DictResponse.self, from: """
+    {
+        "t": "好",
+        "h": [
+            {
+                "d": [
+                    {
+                        "f": "美、善，理想的。",
+                        "type": "形",
+                        "e": ["如：「好東西」、「好風景」"],
+                        "q": ["唐．韋莊．菩薩蠻：「人人盡說江南好」"]
+                    }
                 ],
-                bopomofo: "ㄏㄠˇ",
-                bopomofo2: "hǎu",
-                pinyin: "hǎo"
-            )
+                "b": "ㄏㄠˇ",
+                "p": "hǎo"
+            }
         ],
-        radical: "女",
-        stroke_count: 6
-    )
+        "r": "女",
+        "c": 6,
+        "translation": {
+            "English": ["good", "well", "proper", "nice"],
+            "Deutsch": ["gut", "schön", "richtig"],
+            "francais": ["bon", "bien"]
+        }
+    }
+    """.data(using: .utf8)!)
 } 

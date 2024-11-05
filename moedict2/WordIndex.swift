@@ -4,29 +4,44 @@
 import Foundation
 
 class WordIndex: ObservableObject {
-    // 儲存所有詞彙的陣列
-    @Published private var words: [String] = []
+    // 儲存不同語言的詞彙陣列
+    @Published private var wordsUni: [String] = []  // 國語
+    @Published private var wordsT: [String] = []    // 台語
+    @Published private var wordsH: [String] = []    // 客語
     
     init() {
-        loadLocalIndex()
+        loadAllIndices()
     }
     
-    // 從本地讀取索引檔案
-    private func loadLocalIndex() {
-        // 取得 Assets 中的 index.json 檔案
-        if let url = Bundle.main.url(forResource: "index", withExtension: "json") {
-            do {
-                let data = try Data(contentsOf: url)
-                words = try JSONDecoder().decode([String].self, from: data)
-            } catch {
-                print("索引檔案載入錯誤：\(error)")
-            }
+    // 從本地讀取所有索引檔案
+    private func loadAllIndices() {
+        wordsUni = loadIndex(name: "indexuni")
+        wordsT = loadIndex(name: "indext")
+        wordsH = loadIndex(name: "indexh")
+    }
+    
+    // 讀取單個索引檔案
+    private func loadIndex(name: String) -> [String] {
+        if let url = Bundle.main.url(forResource: name, withExtension: "json"),
+           let data = try? Data(contentsOf: url),
+           let words = try? JSONDecoder().decode([String].self, from: data) {
+            return words
         }
+        print("索引檔案載入錯誤：\(name)")
+        return []
     }
     
-    // 取得搜尋建議
-    func getSuggestions(for text: String, limit: Int = 5) -> [String] {
+    // 根據字典類型取得搜尋建議
+    func getSuggestions(for text: String, dictType: ContentView.DictType, limit: Int = 5) -> [String] {
         guard !text.isEmpty else { return [] }
+        
+        // 選擇對應的詞彙陣列
+        let words = switch dictType {
+        case .mandarin: wordsUni
+        case .taiwanese: wordsT
+        case .hakka: wordsH
+        }
+        
         // 過濾包含搜尋文字的詞彙，並限制數量
         return words.filter { $0.contains(text) }.prefix(limit).map { $0 }
     }

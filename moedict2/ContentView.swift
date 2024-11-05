@@ -20,7 +20,7 @@ struct ContentView: View {
         // 取得對應的 URL 前綴
         var urlPrefix: String {
             switch self {
-            case .mandarin: return "uni"
+            case .mandarin: return "a"
             case .taiwanese: return "t"
             case .hakka: return "h"
             }
@@ -37,12 +37,12 @@ struct ContentView: View {
 //                        .transition(.opacity)
 //                        .padding(.vertical)
                 } else {
-                    ContentUnavailableView(
-                        "萌典2.0",
-                        systemImage: "character.book.closed",
-                        description: Text("輸入中文字詞開始查詢")
-                        
-                    )
+//                    ContentUnavailableView(
+//                        "萌典2.0",
+//                        systemImage: "character.book.closed",
+//                        description: Text("輸入中文字詞開始查詢")
+//                        
+//                    )
                     Spacer()
                     
                     // 版權資訊
@@ -85,10 +85,17 @@ struct ContentView: View {
             .onChange(of: searchText) { newValue in
                 // 取得更多建議（最多顯示 15 個）
                 if let firstChar = newValue.first.map(String.init) {
-                    suggestions = [firstChar] + wordIndex.getSuggestions(for: newValue, limit: 14)
-                        .filter { $0 != firstChar }
+                    suggestions = [firstChar] + wordIndex.getSuggestions(
+                        for: newValue,
+                        dictType: selectedDict,
+                        limit: 14
+                    ).filter { $0 != firstChar }
                 } else {
-                    suggestions = wordIndex.getSuggestions(for: newValue, limit: 15)
+                    suggestions = wordIndex.getSuggestions(
+                        for: newValue,
+                        dictType: selectedDict,
+                        limit: 15
+                    )
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UITextField.textDidChangeNotification)) { _ in
@@ -114,7 +121,7 @@ struct ContentView: View {
         }
         .onAppear {
             // 預設搜尋
-            searchText = "和"
+            searchText = "萌"
             performSearch()
         }
     }
@@ -136,34 +143,18 @@ struct ContentView: View {
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
-                if let error = error {
-                    print("網路錯誤：\(error.localizedDescription)")
-                    self.showError = true
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    print("HTTP 錯誤：\(String(describing: response))")
-                    self.showError = true
-                    return
-                }
-                
-                guard let data = data else {
-                    print("沒有收到數據")
-                    self.showError = true
-                    return
-                }
-                
-                do {
-                    // 先嘗試解析原始 JSON 以便偵錯
-                    if let json = try? JSONSerialization.jsonObject(with: data) {
-                        print("收到的 JSON：\(json)")
-                    }
-                    
-                    let result = try JSONDecoder().decode(DictResponse.self, from: data)
-                    guard !result.heteronyms.isEmpty else {
-                        print("heteronyms 為空")
+                if let data = data {
+                    do {
+                        // 檢查是否有資料返回
+                        guard !data.isEmpty else {
+                            self.showError = true
+                            return
+                        }
+                        
+                        let result = try JSONDecoder().decode(DictResponse.self, from: data)
+                        self.searchResult = result
+                    } catch {
+                        print("解碼錯誤：\(error)")
                         self.showError = true
                         return
                     }

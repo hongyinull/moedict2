@@ -11,6 +11,7 @@ struct CardResultView: View {
     let title: String
     let radical: String?
     let strokeCount: Int?
+    let translations: [String: [String]]?
     
     // 將定義按詞性分組
     private var definitionsByType: [String: [Definition]] {
@@ -51,12 +52,48 @@ struct CardResultView: View {
                 .foregroundStyle(.separator)
                 .padding(.bottom, 0)
             
+            // 詞性定義卡片和翻譯卡片
+            ScrollView {
+                Spacer().frame(height: 15)
+                LazyVStack(spacing: 8) {
+                    // 先顯示詞性定義卡片
+                    ForEach(Array(definitionsByType.keys.sorted()), id: \.self) { type in
+                        if let definitions = definitionsByType[type] {
+                            DefinitionCard(type: type, definitions: definitions)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    // 再顯示翻譯卡片
+                    if let translations = translations, !translations.isEmpty {
+                        ForEach(Array(translations.keys.sorted()), id: \.self) { language in
+                            if let translationArray = translations[language] {
+                                DefinitionCard(
+                                    type: language,
+                                    definitions: translationArray.map { 
+                                        Definition(
+                                            def: $0,
+                                            type: nil,
+                                            example: nil,
+                                            quote: nil
+                                        )
+                                    }
+                                )
+                                .frame(maxWidth: .infinity)
+                            }
+                        }
+                    }
+                    
+                    CopyrightLabel().padding(.bottom, 4)
+                    Spacer().frame(height: 15)
+                }
+            }
+            .scrollIndicators(.hidden)
+            .padding(.bottom, -30)
+            .padding(.top, -15)
+            .scrollContentBackground(.visible)
         }
         .padding(30)
-//        .padding([.top, .horizontal])
-//        .frame(height: UIScreen.main.bounds.height * 0.7) // 限制卡片高度
-//        .background(.regularMaterial)
-//        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 } 
 
@@ -75,84 +112,76 @@ struct BigCardResultView: View {
     
     var body: some View {
         VStack {
-            // 確保有資料才顯示 PageView
-            if !result.heteronyms.isEmpty {
-                PageView(selection: $currentSelection) {
-                    ForEach(0..<result.heteronyms.count, id: \.self) { index in
-                        CardResultView(
-                            heteronym: result.heteronyms[index],
-                            title: result.title,
-                            radical: result.radical,
-                            strokeCount: result.stroke_count
-                        )
-                        .background(.thinMaterial)
-                        .aspectRatio(0.6, contentMode: .fit)
-                        .pageViewCardCornerRadius(30.0)
-                        .pageViewCardShadow(.visible)
-                        .onTapGesture {
-                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                        }
-                    }
-                }
-                .pageViewStyle(.cardDeck)
-                .scaleEffect(1.1)
-                
-                // 只在有多個讀音時顯示指示器
-                if result.heteronyms.count > 1 {
-                    PageIndicator(
-                        selection: $currentSelection,
-                        total: result.heteronyms.count
+            PageView(selection: $currentSelection) {
+                ForEach(result.heteronyms.indices, id: \.self) { index in
+                    CardResultView(
+                        heteronym: result.heteronyms[index],
+                        title: result.title,
+                        radical: result.radical,
+                        strokeCount: result.strokeCount,
+                        translations: result.translations
                     )
-                    .pageIndicatorColor(.secondary.opacity(0.3))
-                    .pageIndicatorCurrentColor(.accentColor)
-                    .singlePageVisibility(.hidden)
-                    .pageIndicatorDuration(6.0)
-                    .offset(y: -20)
-                    .onChange(of: currentSelection) { _ in
-                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                    .background(.thinMaterial)
+                    .aspectRatio(0.6, contentMode: .fit)
+                    .pageViewCardCornerRadius(30.0)
+                    .pageViewCardShadow(.visible)
+                    .onTapGesture {
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        print("Tapped card \(index)")
                     }
                 }
-            } else {
-                // 當沒有資料時顯示提示
-                ContentUnavailableView(
-                    "無法顯示結果",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text("找不到相關資料")
-                )
             }
-        }
-        // 確保 currentSelection 不會超出範圍
-        .onChange(of: result.heteronyms.count) { newCount in
-            if currentSelection >= newCount {
-                currentSelection = max(0, newCount - 1)
-            }
+            .pageViewStyle(.cardDeck)
+            .scaleEffect(1.1)
+            
+            PageIndicator(
+                selection: $currentSelection,
+                total: result.heteronyms.count
+            )
         }
     }
 }
 
 #Preview {
     // 為了更好的預覽效果，我們需要擴充預覽資料
-    let previewResponse = DictResponse(
-        title: "好",
-        heteronyms: [
-            DictResponse.preview.heteronyms[0],
-            Heteronym(
-                definitions: [
-                    Definition(
-                        def: "愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。愛、喜愛。",
-                        type: "動",
-                        example: ["如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」如：「好學不倦」"],
-                        quote: nil
-                    )
+    let previewResponse = try! JSONDecoder().decode(DictResponse.self, from: """
+    {
+        "t": "好",
+        "h": [
+            {
+                "d": [
+                    {
+                        "definition": "美、善，理想的。",
+                        "type": "形",
+                        "example": ["如：「好東西」、「好風景」"],
+                        "quote": ["唐．韋莊．菩薩蠻：「人人盡說江南好」"]
+                    }
                 ],
-                bopomofo: "ㄏㄠˋ",
-                bopomofo2: "hàu",
-                pinyin: "hào"
-            )
+                "bopomofo": "ㄏㄠˇ",
+                "pinyin": "hǎo"
+            },
+            {
+                "d": [
+                    {
+                        "definition": "愛、喜愛。",
+                        "type": "動",
+                        "example": ["如：「好學不倦」"],
+                        "quote": null
+                    }
+                ],
+                "bopomofo": "ㄏㄠˋ",
+                "pinyin": "hào"
+            }
         ],
-        radical: "女",
-        stroke_count: 6
-    )
+        "r": "女",
+        "c": 6,
+        "translation": {
+            "English": ["good", "well", "proper", "nice"],
+            "Deutsch": ["gut", "schön", "richtig"],
+            "francais": ["bon", "bien"]
+        }
+    }
+    """.data(using: .utf8)!)
     
-    return BigCardResultView(result: previewResponse)
+    BigCardResultView(result: previewResponse)
 }

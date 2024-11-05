@@ -44,7 +44,7 @@ struct NormalResultView: View {
                 Text(result.title)
                     .font(.system(size: 36, weight: .bold))
                 
-                if let radical = result.radical, let strokeCount = result.stroke_count {
+                if let radical = result.radical, let strokeCount = result.strokeCount {
                     Text("部首：\(radical) ・ \(strokeCount)畫")
                         .font(.subheadline)
                         .foregroundColor(.gray)

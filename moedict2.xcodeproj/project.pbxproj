@@ -8,7 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		E91118AD2CD1A540007CE9B9 /* PinnedScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = E91118AC2CD1A540007CE9B9 /* PinnedScrollView */; };
-		E9B075662CD41A33008A8E61 /* BigUIPaging in Frameworks */ = {isa = PBXBuildFile; productRef = E9B075652CD41A33008A8E61 /* BigUIPaging */; };
+		E9285C982CD9EAB200074621 /* BigUIPaging in Frameworks */ = {isa = PBXBuildFile; productRef = E9285C972CD9EAB200074621 /* BigUIPaging */; };
+		E9285C9E2CD9EC4500074621 /* BigUIPaging in Frameworks */ = {isa = PBXBuildFile; productRef = E9285C9D2CD9EC4500074621 /* BigUIPaging */; };
+		E97169DD2CD9E8670002B1B4 /* BigUIPaging in Frameworks */ = {isa = PBXBuildFile; productRef = E97169DC2CD9E8670002B1B4 /* BigUIPaging */; };
+		E97BA4C22CD9E6280032A892 /* BigUIPaging in Frameworks */ = {isa = PBXBuildFile; productRef = E97BA4C12CD9E6280032A892 /* BigUIPaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +79,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E91118AD2CD1A540007CE9B9 /* PinnedScrollView in Frameworks */,
-				E9B075662CD41A33008A8E61 /* BigUIPaging in Frameworks */,
+				E9285C982CD9EAB200074621 /* BigUIPaging in Frameworks */,
+				E9285C9E2CD9EC4500074621 /* BigUIPaging in Frameworks */,
+				E97BA4C22CD9E6280032A892 /* BigUIPaging in Frameworks */,
+				E97169DD2CD9E8670002B1B4 /* BigUIPaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +146,10 @@
 			name = moedict2;
 			packageProductDependencies = (
 				E91118AC2CD1A540007CE9B9 /* PinnedScrollView */,
-				E9B075652CD41A33008A8E61 /* BigUIPaging */,
+				E97BA4C12CD9E6280032A892 /* BigUIPaging */,
+				E97169DC2CD9E8670002B1B4 /* BigUIPaging */,
+				E9285C972CD9EAB200074621 /* BigUIPaging */,
+				E9285C9D2CD9EC4500074621 /* BigUIPaging */,
 			);
 			productName = moedict2;
 			productReference = E9FEF7362CD152C20018E6F0 /* moedict2.app */;
@@ -226,7 +235,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E91118AB2CD1A540007CE9B9 /* XCRemoteSwiftPackageReference "PinnedScrollView" */,
-				E9B075642CD41A33008A8E61 /* XCRemoteSwiftPackageReference "BigUIPaging" */,
+				E9285C9C2CD9EC4500074621 /* XCRemoteSwiftPackageReference "BigUIPaging" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E9FEF7372CD152C20018E6F0 /* Products */;
@@ -442,7 +451,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
@@ -486,7 +495,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
@@ -644,9 +653,9 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		E9B075642CD41A33008A8E61 /* XCRemoteSwiftPackageReference "BigUIPaging" */ = {
+		E9285C9C2CD9EC4500074621 /* XCRemoteSwiftPackageReference "BigUIPaging" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/notsobigcompany/BigUIPaging.git";
+			repositoryURL = "https://github.com/hongyinull/BigUIPaging";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.0.3;
@@ -660,9 +669,21 @@
 			package = E91118AB2CD1A540007CE9B9 /* XCRemoteSwiftPackageReference "PinnedScrollView" */;
 			productName = PinnedScrollView;
 		};
-		E9B075652CD41A33008A8E61 /* BigUIPaging */ = {
+		E9285C972CD9EAB200074621 /* BigUIPaging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E9B075642CD41A33008A8E61 /* XCRemoteSwiftPackageReference "BigUIPaging" */;
+			productName = BigUIPaging;
+		};
+		E9285C9D2CD9EC4500074621 /* BigUIPaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9285C9C2CD9EC4500074621 /* XCRemoteSwiftPackageReference "BigUIPaging" */;
+			productName = BigUIPaging;
+		};
+		E97169DC2CD9E8670002B1B4 /* BigUIPaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BigUIPaging;
+		};
+		E97BA4C12CD9E6280032A892 /* BigUIPaging */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = BigUIPaging;
 		};
 /* End XCSwiftPackageProductDependency section */
