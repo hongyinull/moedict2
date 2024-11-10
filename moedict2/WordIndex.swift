@@ -5,7 +5,7 @@ import Foundation
 
 class WordIndex: ObservableObject {
     // 儲存不同語言的詞彙陣列
-    @Published private var wordsUni: [String] = []  // 國語
+    @Published private var wordsA: [String] = []  // 國語
     @Published private var wordsT: [String] = []    // 台語
     @Published private var wordsH: [String] = []    // 客語
     
@@ -15,7 +15,7 @@ class WordIndex: ObservableObject {
     
     // 從本地讀取所有索引檔案
     private func loadAllIndices() {
-        wordsUni = loadIndex(name: "indexuni")
+        wordsA = loadIndex(name: "indexa")
         wordsT = loadIndex(name: "indext")
         wordsH = loadIndex(name: "indexh")
     }
@@ -37,7 +37,7 @@ class WordIndex: ObservableObject {
         
         // 選擇對應的詞彙陣列
         let words = switch dictType {
-        case .mandarin: wordsUni
+        case .mandarin: wordsA
         case .taiwanese: wordsT
         case .hakka: wordsH
         }
