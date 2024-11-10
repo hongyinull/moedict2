@@ -8,11 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct WelcomeScreen: View {
+struct WelcomeView: View {
     @Binding var showWelcomeScreen: Bool
-    @Environment(\.presentationMode) var presentationMode
-    @State public var showDisclaimer = false
-    @State public var showReference = false
     
     var body: some View {
         VStack {
@@ -21,35 +18,52 @@ struct WelcomeScreen: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
-            Text("Posture Risk")
+            Text("萌典2")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
-            Text("快速評估你的姿勢風險")
+            Text("快速查詢中文字詞的意義")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
             Spacer()
             
             VStack(spacing: 24) {
-                FeatureCell(image: "figure.walk", title: "即時姿勢追蹤", subtitle: "在 AR 空間中即時捕捉人體姿勢", color: .accentColor)
-                FeatureCell(image: "chart.bar.fill", title: "REBA 評分", subtitle: "快速計算並顯示姿勢的風險評分", color: .accentColor)
-                FeatureCell(image: "ruler.fill", title: "身體測量", subtitle: "自動測量關節角度和身體部位距離", color: .accentColor)
-                FeatureCell(image: "person.fill.viewfinder", title: "多種顯示方式", subtitle: "自由切換 3D 模型和骨架模式", color: .accentColor)
+                FeatureCell(
+                    image: "books.vertical.fill",
+                    title: "三種辭典",
+                    subtitle: "支援國語、閩南語、客語查詢",
+                    color: .accentColor
+                )
+                FeatureCell(
+                    image: "book.pages.fill",
+                    title: "完整釋義",
+                    subtitle: "包含讀音、部首、筆畫等詳細資訊",
+                    color: .accentColor
+                )
+                FeatureCell(
+                    image: "globe.asia.australia.fill",
+                    title: "多語翻譯",
+                    subtitle: "提供英語等多國語言對照翻譯",
+                    color: .accentColor
+                )
             }
             .frame(maxWidth: .infinity)
-            .padding(.horizontal,50)
+            .padding(.horizontal, 50)
             
             Spacer()
             
             Button(action: {
                 showWelcomeScreen = false
-                presentationMode.wrappedValue.dismiss()
+                // 使用可選綁定（optional binding）來安全處理 URL
+                if let url = URL(string: "https://line.me/ti/g2/NNRlE3iBmhR36rYfKzQlqAo9lIXgYJqDcZE0ow?utm_source=invitation&utm_medium=link_copy&utm_campaign=default") {
+                    UIApplication.shared.open(url)
+                }
             }) {
                 Text("開始探索")
                     .font(.headline)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.accentColor)
@@ -59,36 +73,18 @@ struct WelcomeScreen: View {
             
             HStack(spacing: 20) {
                 Button(action: {
-                    if let url = URL(string: "https://www.instagram.com/boiling_bo/") {
+                    if let url = URL(string: "https://github.com/g0v/moedict-webkit") {
                         UIApplication.shared.open(url)
                     }
                 }) {
-                    Text("作者資訊")
+                    Text("專案資訊")
                         .font(.subheadline)
                         .foregroundColor(.accentColor)
-                }
-                
-                Button(action: { showDisclaimer.toggle() }) {
-                    Text("醫療免責聲明")
-                        .font(.subheadline)
-                        .foregroundColor(.accentColor)
-                }
-                .sheet(isPresented: $showDisclaimer) {
-                    DisclaimerView()
-                }
-                
-                Button(action: { showReference.toggle() }) {
-                    Text("資訊來源")
-                        .font(.subheadline)
-                        .foregroundColor(.accentColor)
-                }
-                .sheet(isPresented: $showReference) {
-                    ReferenceView()
                 }
             }
             .padding(.top, 3)
         }
-        .padding(.bottom,5)
+        .padding(.bottom, 5)
     }
 }
 
@@ -120,9 +116,8 @@ struct FeatureCell: View {
     }
 }
 
-// 預覽提供者
-struct WelcomeScreen_Previews: PreviewProvider {
+struct WelcomeView_Previews: PreviewProvider {
     static var previews: some View {
-        WelcomeScreen(showWelcomeScreen: .constant(true))
+        WelcomeView(showWelcomeScreen: .constant(true))
     }
 }

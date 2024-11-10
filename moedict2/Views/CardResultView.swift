@@ -134,7 +134,7 @@ struct BigCardResultView: View {
                 selection: $currentSelection,
                 total: result.heteronyms.count
             )
-            .pageIndicatorDuration(6.0)
+            .pageIndicatorDuration(10.0)
             .pageIndicatorCurrentColor(.accentColor)
             .pageIndicatorColor(.secondary.opacity(0.5))
 //            .pageIndicatorBackgroundStyle(.prominent)

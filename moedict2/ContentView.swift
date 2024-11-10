@@ -29,6 +29,9 @@ struct ContentView: View {
     
     @State private var selectedDict: DictType = .mandarin
     
+    @AppStorage("hasShownWelcome") private var hasShownWelcome = false
+    @State private var showingWelcomeSheet = false
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 10) {
@@ -38,7 +41,7 @@ struct ContentView: View {
 //                        .padding(.vertical)
                 } else {
 //                    ContentUnavailableView(
-//                        "萌典2.0",
+//                        "萌典2",
 //                        systemImage: "character.book.closed",
 //                        description: Text("輸入中文字詞開始查詢")
 //                        
@@ -53,25 +56,42 @@ struct ContentView: View {
             }
 //            .ignoresSafeArea(.all, edges: .bottom)
 //            .background(.background)
-            .navigationTitle("萌典2.0")
+            .navigationTitle("萌典2")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Picker("字典選擇", selection: $selectedDict) {
-                            ForEach(DictType.allCases, id: \.self) { type in
-                                Text(type.rawValue).tag(type)
+                    HStack(spacing: 1) {
+                        // 新增的資訊按鈕
+                        Button(action: {
+                            showingWelcomeSheet = true
+                            UINotificationFeedbackGenerator().notificationOccurred(.success)
+                        }) {
+                            HStack {
+                                Image(systemName: "info.square.fill")
                             }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.accentColor.opacity(0.2))
+                            .cornerRadius(8)
                         }
-                    } label: {
-                        HStack {
-                            Image(systemName: "book")
-                            Text(selectedDict.rawValue)
+                        
+                        // 現有的字典選擇選單
+                        Menu {
+                            Picker("字典選擇", selection: $selectedDict) {
+                                ForEach(DictType.allCases, id: \.self) { type in
+                                    Text(type.rawValue).tag(type)
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "book.fill")
+                                Text(selectedDict.rawValue)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.accentColor.opacity(0.2))
+                            .cornerRadius(8)
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.accentColor.opacity(0.2))
-                        .cornerRadius(8)
                     }
                 }
             }
@@ -113,16 +133,23 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $showingWelcomeSheet) {
+            WelcomeView(showWelcomeScreen: $showingWelcomeSheet)
+        }
+        .onAppear {
+            if !hasShownWelcome {
+                showingWelcomeSheet = true
+                hasShownWelcome = true
+            }
+            // 預設搜尋
+            searchText = "萌"
+            performSearch()
+        }
         
         .alert("查詢失敗", isPresented: $showError) {
             Button("確定", role: .cancel) { }
         } message: {
             Text("請確認網路連線並重試")
-        }
-        .onAppear {
-            // 預設搜尋
-            searchText = "萌"
-            performSearch()
         }
     }
     
